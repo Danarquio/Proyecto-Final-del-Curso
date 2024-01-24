@@ -1,0 +1,39 @@
+<img src="https://danarquio.github.io/preentrega1diaz/static/media/Dragon.561ef1fd2e215fdac7e01d9795925577.svg" style="max-height: 200px;">
+<hr>
+<a href="/chat"><h3>Ir al chat</h3></a>
+<a href="/profile"><h3>Ir a tu perfil de usuario</h3></a>
+<a href="/cart/6519628deea059c6ae6e8e6d"><h3>Ir al Carrito</h3></a>
+<a href="/"><h3>Volver al inicio</h3></a>
+<a href="/mockingproducts">Ir a Mocking de Productos ficticios</a>
+
+<h1>Productos</h1>
+<div class="shop">
+    
+    {{#each products}}
+    <div class="productos">
+
+        <img class="vuelta" src={{this.carru1}} alt={{this.title}} />
+        <div class="infoCard">
+
+            <div class="textosprod">
+
+                <h2 class="productos__nombre">{{this.title}}</h2>
+                <div>
+                    <h2 class="productos__precio">${{this.price}}</h2>
+                    <h4 class="productos__gramo">x {{this.minimo}}gramos</h4>
+                </div>
+
+                <button class="add-to-cart-btn" data-product-id="{{this._id}}">Agregar al carrito</button>
+                <a href="/products/{{this._id}}">Ver detalles</a>
+                
+            </div>
+
+        </div>
+
+
+    </div>
+    {{/each}}
+
+</div>
+
+
