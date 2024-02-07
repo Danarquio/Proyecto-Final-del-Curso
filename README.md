@@ -74,7 +74,7 @@ La aplicación estará disponible en:
 
 ## Estructura del Proyecto
 ```
-Tercera Entrega/
+Proyecto Final/
 ├── src/
 │   ├── config/
 │   │   ├── db.js
@@ -103,10 +103,21 @@ Tercera Entrega/
 │   │   │   ├── ProductModel.js
 │   │   │   ├── TicketModel.js
 │   │   │   └── UserModel.js
+│   ├── docs/
+│   │   ├── Carts.yaml
+│   │   ├── Products.yaml
+│   │   ├── Users.yaml
+│   │   ├── Documentacion.yaml
 │   ├── public/
 │   │   ├── css/
+│   │   │   └── style.css
 │   │   ├── js/
+│   │   │   └── chat.js
 │   │   └── files/
+│   ├── repositories/
+│   │   ├── CartRepository.json
+│   │   ├── ProductRepository.json
+│   │   └── UserRepository.js
 │   ├── router/
 │   │   ├── carts.routes.js
 │   │   ├── messages.routes.js
@@ -114,10 +125,6 @@ Tercera Entrega/
 │   │   ├── upload.routes.js
 │   │   ├── user.routes.js
 │   │   └── views.routes.js
-│   ├── repositories/
-│   │   ├── CartRepository.json
-│   │   ├── ProductRepository.json
-│   │   └── UserRepository.js
 │   ├── views/
 │   │   ├──layaouts/
 │   │   ├── addProduct.handlebars
@@ -131,14 +138,21 @@ Tercera Entrega/
 │   │   ├── faker.handlebars
 │   │   ├── home.handlebars
 │   │   ├── login.handlebars
+│   │   ├── pmanageProducts.handlebars
+│   │   ├── productAdded.handlebars
 │   │   ├── passreset.handlebars
 │   │   ├── productos.handlebars
-│   │   ├── productAdded.handlebars
 │   │   ├── profile.handlebars
-│   │   └── register.handlebars
+│   │   ├── register.handlebars
+│   │   ├── reset.handlebars
+│   │   └── tokenreset.handlebars
 │   ├── app.js
 │   ├── index.js
 │   └── utils.js
+├── test/
+│   ├── Cart.test.js
+│   ├── Product.test.js
+│   └── User.test.js
 ├── .env
 ├── .gitignore
 ├── package-lock.json

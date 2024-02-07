@@ -131,4 +131,8 @@ router.put('/premium/:uid', userController.updateToPremium);
 //subir documentos (multer)
 router.post('/:uid/documents', upload, userController.uploadDocuments);
 
+//eliminar usuarios inactivos
+router.delete('/inactive-users', userController.deleteInactiveUsers);
+
+
 export default router;

@@ -151,7 +151,7 @@ export const updateToPremium = async (req, res) => {
     const requiredDocs = ['Identificacion', 'Comprobante de domicilio', 'Comprobante de estado de cuenta'];
 
     const normalizeString = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-    
+
     // Verifica si cada documento requerido está presente
     const allDocsUploaded = requiredDocs.every(doc =>
       user.documents.some(userDoc => normalizeString(userDoc.name) === normalizeString(doc))
@@ -177,7 +177,7 @@ export const updateToPremium = async (req, res) => {
   }
 };
 
-
+//Cargar documentos de identidad
 export const uploadDocuments = async (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send('No se han subido archivos');
@@ -210,3 +210,33 @@ export const uploadDocuments = async (req, res) => {
   }
 };
 
+//eliminar usuarios inactivos
+export const deleteInactiveUsers = async (req, res) => {
+  try {
+    // Define el tiempo de inactividad (48 horas en este caso)
+    const INACTIVITY_PERIOD = 48 * 60 * 60 * 1000; // Milisegundos
+    const cutoffDate = new Date(Date.now() - INACTIVITY_PERIOD);
+
+    // Encuentra los usuarios que no se han conectado en las últimas 48 horas
+    const inactiveUsers = await userRepository.findUsersByLastConnection(cutoffDate);
+
+    // Envía un correo a cada usuario inactivo
+    for (const user of inactiveUsers) {
+      const emailOptions = {
+        from: 'tu-email@ejemplo.com',
+        to: user.email,
+        subject: 'Notificación de Eliminación por Inactividad',
+        html: `<p>Hola ${user.first_name}, tu cuenta ha sido eliminada debido a inactividad prolongada.</p>`
+      };
+      await sendEmail(emailOptions);
+    }
+
+    // Elimina los usuarios inactivos
+    const result = await userRepository.deleteUsersByLastConnection(cutoffDate);
+
+    res.json({ success: true, message: 'Usuarios inactivos eliminados y notificados.', deletedCount: result.deletedCount });
+  } catch (error) {
+    console.error('Error al eliminar usuarios inactivos:', error);
+    res.status(500).send('Error al eliminar usuarios inactivos.');
+  }
+};

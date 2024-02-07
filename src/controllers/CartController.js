@@ -11,9 +11,9 @@ class CartController{
 
 //INCOMPLETOOOOruta para sacar el id del carrito del usuario para usar con el boton micarrito INCOMPLETOOOO
 async getUserCart(req, res) {
-    console.log("paso1funcion");
+    
     try {
-        console.log("FUNCA");
+        
         // Obtener el correo electrónico del usuario desde req.user
         const userEmail = req.user.email;
         console.log(userEmail);
@@ -70,17 +70,19 @@ async getAllCarts(req, res) {
 //funcion para crear un carrito
 async createCart(req, res) {
     try {
-        const newCart = req.body;
-        const cart = await cartDao.createCart(newCart);
-        if (!cart) {
-            return res.status(500).json({ message: "Error al crear el carrito" });
-        }
-        return res.json({ message: "Carrito creado", cart });
+      // Obtener el ID del usuario si está autenticado, de lo contrario null
+      const userId = req.isAuthenticated() ? req.user._id : null;
+
+      // Crear un nuevo carrito con o sin usuario asociado
+      const newCart = new cartsModel({ products: [], user: userId });
+      await newCart.save();
+
+      return res.json({ message: "Carrito creado", cart: newCart });
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ status: "error", error: "tenemos un 33-12" });
+      console.error(error);
+      return res.status(500).json({ status: "error", error: "Error al crear carrito" });
     }
-}
+  }
 
 // funcion para añadir un producto especifico a un carrito especifico 
 
@@ -235,20 +237,3 @@ async calculateTotal(cartProducts) {
 
 export default CartController;
 
-/* router.post("/add", async (req, res) => {
-  try {
-    // Lógica para agregar un carrito...
-    const result = await cartManager.addCarts();
-    res.status(200).json({ status: "success", message: result });
-  } catch (error) {
-    console.error("Error al agregar el carrito:", error);
-    res.status(500).json({ status: "error", message: "Error interno del servidor" });
-  }
-});
-
-
-
-
-
-export default router;
- */

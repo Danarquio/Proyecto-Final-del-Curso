@@ -4,6 +4,10 @@ import { isAuthenticated } from '../config/middlewares.js';
 import CartRepository from "../repositories/CartRepository.js";
 import CartController from "../controllers/CartController.js";
 import passport from "../config/middlewares.js";
+import { productsModel } from "../DAO/models/products.model.js";
+import { sendEmail } from '../config/nodemailer.js';
+import ticketModel from '../DAO/models/tickets.model.js';
+import { v4 as uuidv4 } from 'uuid';
 
 const router = Router()
 const cartManager = new CartManager()
@@ -160,13 +164,32 @@ router.post("/add-to-cart/:productId", isAuthenticated, async (req, res) => {
     // Asumiendo que la cantidad del producto a agregar viene en el body de la solicitud
     const { quantity } = req.body;
 
-    // Lógica para agregar el producto al carrito del usuario
-    const result = await cartRepository.addProductToUserCart(userId, productId, quantity);
+    // Obtén o crea el carrito del usuario o crea uno nuevo si no existe
+    let userCart = await cartRepository.getCartByUserId(userId);
+    if (!userCart) {
+      userCart = await cartRepository.createCartForUser(userId);
+    }
 
-    res.status(200).json({ status: "success", message: "Producto agregado al carrito", cart: result });
+    // Agrega el producto al carrito
+    const updatedCart = await cartRepository.addProductToUserCart(userCart._id, productId, quantity);
+
+    res.status(200).json({ status: "success", message: "Producto agregado al carrito", cart: updatedCart });
   } catch (error) {
     console.error("Error al agregar el producto al carrito:", error);
     res.status(500).json({ status: "error", message: "Error al agregar el producto al carrito" });
+  }
+});
+
+
+router.post('/product-details', async (req, res) => {
+  const productIds = req.body.productIds; // Asume un array de IDs
+  try {
+    const products = await productsModel.find({
+      '_id': { $in: productIds }
+    });
+    res.json(products);
+  } catch (error) {
+    res.status(500).send({ message: 'Error al obtener detalles de productos', error: error });
   }
 });
 
@@ -175,5 +198,77 @@ router.delete("/api/deleteproductcarts/:cid", cartController.deleteAllProductsIn
 
 router.get("/api/carts/:cid/purchase", passport.authenticate('current', { session: false }), isAuthenticated, cartController.purchaseProducts); 
 // realizar la compra total de los productos del carrito
+
+
+// Endpoint para crear un ticket y enviar por email
+router.post("/ticket", async (req, res) => {
+  try {
+    // Extraer la información del cuerpo de la solicitud
+    const { name, email, phone, address, products } = req.body;
+
+    // Verifica que products es un arreglo y tiene elementos
+    if (!Array.isArray(products) || products.length === 0) {
+      return res.status(400).json({ error: "El campo products debe ser un arreglo con al menos un elemento." });
+    }
+
+    // Obtener detalles completos de los productos
+    const productsDetails = await Promise.all(products.map(async (item) => {
+      const product = await productsModel.findById(item.productId); // Asegúrate de que este es el nombre correcto de tu modelo de productos
+      if (!product) {
+        throw new Error(`Producto con ID ${item.productId} no encontrado`);
+      }
+      
+      const finalPrice = (item.quantity * product.price) / (product.minimo)
+      return {
+        productId: item.productId, // Mantenemos el ID del producto
+        quantity: item.quantity, // La cantidad específica del producto en el ticket
+        price: finalPrice, // El precio del producto desde la base de datos
+        title: product.title // El título del producto para usar en el correo electrónico
+      };
+    }));
+
+    console.log( productsDetails )
+    // Crear un código único para el ticket
+    const ticketCod = uuidv4();
+
+    const totaly = productsDetails.reduce((acc, item) => acc + item.price, 0); // Suma los precios finales
+
+    // Crear un nuevo ticket en la base de datos con la estructura actualizada
+    const newTicket = new ticketModel({
+      name,
+      email,
+      phone,
+      address,
+      products: productsDetails, // Ahora guardamos la estructura completa de cada producto
+      totalPrice: totaly,
+      ticketCode: ticketCod
+    });
+
+    // Guardar el ticket en la base de datos
+    const savedTicket = await newTicket.save();
+
+    
+    // Preparar el correo electrónico
+    const emailOptions = {
+      from: 'tu-email@example.com',
+      to: email,
+      subject: 'Confirmación de pedido',
+      html: `<p>Hola ${name}, aquí está la confirmación de tu pedido con el código: ${ticketCod}</p>
+             <p>Detalles del pedido:</p>
+             ${productsDetails.map(item => `<p>${item.title}: ${item.quantity}gr x $${item.price}</p>`).join('')}
+             <p>Total a pagar: $${totaly.toFixed(0)}</p>`,
+    };
+
+    // Enviar el correo electrónico
+    await sendEmail(emailOptions);
+
+    res.json({ redirectUrl: `/ticket/${savedTicket._id}` });
+  } catch (error) {
+    console.error("Error al crear el ticket y enviar email:", error);
+    res.status(500).json({ error: "Error al crear el ticket y enviar email" });
+  }
+});
+
+
 
 export default router;

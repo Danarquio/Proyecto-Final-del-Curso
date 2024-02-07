@@ -8,36 +8,64 @@
 
 <h1>Lista de Usuarios</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Rol Actual</th>
-                <th>Actualizar Rol</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each users}}
-    <tr>
-        <td>{{first_name}} {{last_name}}</td>
-        <td>{{email}}</td>
-        <td>{{rol}}</td>
-        <td>
-            <form action="/api/user/change-role/{{_id}}" method="POST">
-                <select name="newRole">
-                    <option value="user" {{#if this.isUserRole}}selected{{/if}}>User</option>
-                    <option value="admin" {{#if this.isAdminRole}}selected{{/if}}>Admin</option>
-                    <option value="premium" {{#if this.isPremiumRole}}selected{{/if}}>Premium</option>
-                </select>
-                <button type="submit">Actualizar</button>
-            </form>
-        </td>
-    </tr>
-{{/each}}
-        </tbody>
-    </table>
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol Actual</th>
+            <th>Última Conexión</th>
+            <th>Actualizar Rol</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each users}}
+        <tr>
+            <td>{{first_name}} {{last_name}}</td>
+            <td>{{email}}</td>
+            <td>{{rol}}</td>
+            <td>{{last_connection}}</td> <!-- Asegúrate de pasar el dato formateado desde el servidor -->
+            <td>
+                <form action="/api/user/change-role/{{_id}}" method="POST">
+                    <select name="newRole">
+                        <option value="user" {{#if this.isUserRole}}selected{{/if}}>User</option>
+                        <option value="admin" {{#if this.isAdminRole}}selected{{/if}}>Admin</option>
+                        <option value="premium" {{#if this.isPremiumRole}}selected{{/if}}>Premium</option>
+                    </select>
+                    <button type="submit">Actualizar</button>
+                </form>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
 
-</div>
+<!-- Botón para eliminar usuarios inactivos -->
+<button id="deleteInactiveUsersBtn">Eliminar usuarios inactivos</button>
+
+<script>
+  document.getElementById('deleteInactiveUsersBtn').addEventListener('click', function() {
+    if (confirm('¿Estás seguro de que quieres eliminar a todos los usuarios inactivos?')) {
+      fetch('/api/user/inactive-users', {
+        method: 'DELETE',
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Error en la solicitud');
+      })
+      .then(data => {
+        alert('Usuarios inactivos eliminados con éxito');
+        // Recargar la página o actualizar la vista según sea necesario
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert(error.message);
+      });
+    }
+  });
+</script>
 
 
+<link rel="stylesheet" href="/css/style.css">

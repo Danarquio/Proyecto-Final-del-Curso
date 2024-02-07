@@ -1,14 +1,203 @@
-<h1>Productos en el carrito</h1>
-{{#if products}}
-  <ul>
-    {{#each products}}
-      <li>{{this.productId.title}} - Precio: ${{this.productId.price}}</li>
-    {{/each}}
-  </ul>
-{{else}}
-  <p>El carrito está vacío.</p>
-{{/if}}
+<!DOCTYPE html>
+<html lang="en">
 
-<a href="/products"><h3>Volver a todos los productos</h3></a>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" type="text/css" href="/css/style.css">
+  <title>Dracarnis</title>
+  <meta name="keywords"
+    content="Derivados de la carne, carne, chorizo, salame, jamon serrano, charqui, jerqui, jamon, salchicha, salchichon, embutidos, charcuteria , cecinas, fiambres, artesanal ">
+
+  <meta name="description"
+    content="Fabricación artesanal de productos derivados de la carne como: Cecinas, Charcuteria, Embutidos, Fiambres">
+
+  <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+  <!-- BARRA NAVEGACION _______________________________________________________________________-->
+  <header>
+    <nav class="navegador">
+
+      <ul class="inicio">
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="/icons/hamburger-menu-icon.svg" alt="menu hamburguesa">
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/">Inicio</a></li>
+            <hr class="dropdown-divider">
+            <li><a class="dropdown-item" href="./Pages/tienda.html">Tienda</a></li>
+            <li><a class="dropdown-item" href="./Pages/alquimia.html">Alquimia</a></li>
+            <li><a class="dropdown-item" href="./Pages/cursos.html">Cursos</a></li>
+            <li><a class="dropdown-item" href="./Pages/servicios.html">Servicios</a></li>
+            <hr class="dropdown-divider">
+            <li><a class="dropdown-item" href="./Pages/contactanos.html">Contactanos</a></li>
+          </ul>
+        </li>
+
+        <li class="logo1"><a href="/">
+            <img src="/images/Dracarnis.svg" alt="logotipo dracarnis"> </a></li>
+        <li class="tienda , entrada"> <a href="/products">
+            <img src="/icons/tienda 3.svg" alt="icono tienda"></a></li>
+        <li class="alquimia , entrada"><a href="./Pages/alquimia.html">
+            <img src="/icons/alquimia.svg" alt="icono alquimia"></a></li>
+        <li class="cursos , entrada"><a href="./Pages/cursos.html">
+            <img src="/icons/cursos 3.svg" alt="icono cursos"></a></li>
+        <li class="servicios , entrada"> <a href="./Pages/servicios.html">
+            <img src="/icons/servicios 3.svg" alt="icono servicios"></a></li>
+        <li class="contactanos , entrada"> <a href="./Pages/contactanos.html">
+            <img src="/icons/contactanos.svg" alt="icono contacto"></a></li>
+        <li class="drabar">
+          <img src="/images/Dragon.svg" alt="isologo dracarnis">
+        </li>
+        <li class="carreta , entrada">
+          <a href="/cart/{{cartId}}">
+            <img src="/icons/carreta.svg" alt="carreta">
+          </a>
+        </li>
+        <li class="user , entrada">
+          <a href="/profile">
+            <img src="/icons/user.svg" alt="user">
+          </a>
+        </li>
+
+
+      </ul>
+    </nav>
+  </header>
+
+
+<!-- CARRITO _______________________________________________________________________-->
+
+  <section class="ventanilla">
+    <div class="cuadroventaCarrito">
+      <h2 class="tituloCarrito">Productos en el Carrito</h2>
+
+      <div class="division">
+
+        <div id="cart-items" class="elementodecompra">
+          {{#if products.length}}
+          {{#each products}}
+          <div class="elementodecompra2">
+            <img class="imagencompra" src="{{this.productId.thumbnails}}" alt="{{this.productId.title}}" />
+            <h4 class="nombreenCarrito">{{this.productId.title}}</h4>
+            <h4 class="cantidad">Cantidad: {{this.quantity}}gr</h4>
+            <h5 class="precioenCarrito" 
+            data-product-id="{{this.productId._id}}"
+            data-quantity="{{this.quantity}}" 
+            data-price="{{this.productId.price}}"
+            data-minimo="{{this.productId.minimo}}">Precio: Calculando...</h5>
+          </div>
+          {{/each}}
+          {{else}}
+          <p>El carrito está vacío.</p>
+          {{/if}}
+        </div>
+
+        <div class="formulariocomp">
+          <h2>Datos de Envio</h2>
+          <form action="">
+            <label for="first_name">Nombre</label>
+            <input type="text" name="first_name">
+
+            <label for="email">Email</label>
+            <input type="email" name="email">
+
+            <label for="address">Direccion</label>
+            <input type="string" name="address">
+
+            <label for="phone">Numero de Telefono</label>
+            <input type="phone" name="phone">
+          </form>
+        </div>
+      </div>
+
+      <button class="botonAgregar"> PAGAR </button>
+
+      <a href="/products">
+        <h3>Volver a todos los productos</h3>
+      </a>
+    </div>
+
+
+  </section>
+
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Cálculo de precios
+    const precioElements = document.querySelectorAll('.precioenCarrito');
+    precioElements.forEach(el => {
+        const quantity = parseInt(el.dataset.quantity, 10);
+        const price = parseFloat(el.dataset.price);
+        const minimo = parseInt(el.dataset.minimo, 10);
+        const totalPrice = (quantity * price) / minimo;
+        el.textContent = `Precio: $${totalPrice.toFixed(0)}`;
+    });
+
+    // Evento del botón pagar
+    document.querySelector('.botonAgregar').addEventListener('click', async function() {
+        const name = document.querySelector('[name="first_name"]').value;
+        const email = document.querySelector('[name="email"]').value;
+        const address = document.querySelector('[name="address"]').value;
+        const phone = document.querySelector('[name="phone"]').value;
+        
+        // Extrayendo el ID del carrito de la URL
+        const urlSegments = window.location.pathname.split('/');
+        const cartId = urlSegments[urlSegments.length - 1]; // Asumiendo que el ID del carrito es el último segmento de la URL
+
+        // Preparar los datos para el ticket basados en los productos listados en el carrito
+        const products = [...precioElements].map(el => ({
+            productId: el.dataset.productId, // Asegúrate de que este data attribute exista
+            quantity: parseInt(el.dataset.quantity, 10),
+            price: parseFloat(el.dataset.price), // Este podría ser el precio unitario o ajustarlo según necesites
+            // Añade aquí más datos si necesitas
+        }));
+
+        try {
+            const response = await fetch(`/api/carts/ticket`, { // Ajusta esta URL a tu endpoint correcto
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    cartId, // Envía el ID del carrito como parte de los datos, si tu endpoint lo necesita
+                    name,
+                    email,
+                    address,
+                    phone,
+                    products, // Envía los productos extraídos
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Redirige al usuario a la vista del ticket o muestra el resultado
+                window.location.href = data.redirectUrl; // Asegúrate de que tu backend envíe este dato
+            // Eliminar el carrito después de completar la compra
+                await fetch(`/api/carts/${cartId}`, {
+                    method: 'DELETE'
+                });
+            } else {
+                // Maneja el caso de error
+                alert('Error al completar la compra: ' + (data.message || 'Error desconocido'));
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al procesar la compra.');
+        }
+    });
+});
+</script>
+
+
+</body>
+
+</html>

@@ -65,16 +65,37 @@ class UserRepository {
   //modificar rol de usuario
   async updateUserRole(userId, newRole) {
     try {
-        const updatedUser = await usersModel.findByIdAndUpdate(
-            userId, 
-            { rol: newRole },
-            { new: true }
-        );
-        return updatedUser;
+      const updatedUser = await usersModel.findByIdAndUpdate(
+        userId,
+        { rol: newRole },
+        { new: true }
+      );
+      return updatedUser;
     } catch (error) {
-        throw new Error('Error al actualizar el rol del usuario: ' + error.message);
+      throw new Error('Error al actualizar el rol del usuario: ' + error.message);
     }
-}
+  }
+
+  //eliminar usuarios por inactividad 24h
+  async deleteUsersByLastConnection(cutoffDate) {
+    try {
+      const result = await usersModel.deleteMany({ last_connection: { $lt: cutoffDate } });
+      return result; // Esto devolverá un objeto con información sobre la operación, incluido el número de documentos eliminados
+    } catch (error) {
+      throw new Error('Error al eliminar usuarios por inactividad: ' + error.message);
+    }
+  }
+
+  async findUsersByLastConnection(cutoffDate) {
+    try {
+      const users = await usersModel.find({
+        last_connection: { $lt: cutoffDate }
+      });
+      return users;
+    } catch (error) {
+      throw new Error('Error al buscar usuarios inactivos');
+    }
+  }
 
 }
 

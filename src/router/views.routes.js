@@ -4,19 +4,32 @@ import CartManager from "../controllers/CartManager.js"
 import { isAdmin } from "../config/middlewares.js";
 import { getUsersAndView } from '../controllers/UserController.js';
 import ProductController from "../controllers/ProductController.js";
+import CartRepository from "../repositories/CartRepository.js";
+import ticketModel from "../DAO/models/tickets.model.js";
 
 
 const router = Router()
 
 const product = new ProductManager
 const cart = new CartManager
+const cartRepository = new CartRepository
 
 //Pagina inicial
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
+    let cartId = null;
+
+    if (req.isAuthenticated()) {
+        const userCart = await cartRepository.getCartByUserId(req.user._id);
+        cartId = userCart?._id.toString();
+    }
+
+
     res.render("home", {
-        title: "Dracarnis Home"
+        title: "Dracarnis Home",
+        cartId: cartId
     })
 })
+
 
 
 // Middleware para verificar la autenticación del usuario
@@ -39,9 +52,17 @@ router.get("/chat", isAuthenticated, (req, res) => {
 router.get("/products", async (req, res) => {
     let allProducts = await product.getProducts()
     allProducts = allProducts.map(product => product.toJSON())
+    let cartId = null;
+
+    if (req.isAuthenticated()) {
+        const userCart = await cartRepository.getCartByUserId(req.user._id);
+        cartId = userCart?._id.toString();
+    }
+
     res.render("productos", {
         title: "Dracarnis | Productos",
-        products: allProducts
+        products: allProducts,
+        cartId: cartId
     })
 })
 
@@ -78,13 +99,20 @@ router.get("/products/:id", async (req, res) => {
     }
 });
 
-//renderizado de productos en carrito
+//renderizado de productos en carrito (mongodb)
 router.get("/cart/:cid", async (req, res) => {
     let id = req.params.cid;
     let cartWithProducts = await cart.getCartWithProducts(id);
     res.render("cart", {
         title: "Vista Carro",
         products: cartWithProducts.products,
+    });
+});
+
+//renderizado de productos en carrito (localstorage)
+router.get("/local-cart", async (req, res) => {
+    res.render("cartlocal", {
+        title: "Vista Carro"
     });
 });
 
@@ -158,6 +186,23 @@ router.get('/confirmar-premium', isAuthenticated, (req, res) => {
     });
 });
 
+router.get("/auth-status", (req, res) => {
+    res.json({ isLoggedIn: req.isAuthenticated() });
+});
+
+
+router.get("/ticket/:id", async (req, res) => {
+    try {
+      const ticket = await ticketModel.findById(req.params.id).populate('products.productId');
+      if (!ticket) {
+        return res.status(404).send("Ticket no encontrado");
+      }
+      res.render("ticketView", { ticket: ticket.toJSON() }); // Asume que tienes un archivo ticketView.handlebars
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error al obtener el ticket");
+    }
+  });
 
 
 export default router

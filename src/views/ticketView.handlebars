@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dracarnis</title>
+    <meta name="keywords"
+        content="Derivados de la carne, carne, chorizo, salame, jamon serrano, charqui, jerqui, jamon, salchicha, salchichon, embutidos, charcuteria , cecinas, fiambres, artesanal ">
+
+    <meta name="description"
+        content="Fabricación artesanal de productos derivados de la carne como: Cecinas, Charcuteria, Embutidos, Fiambres">
+
+    <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+    <!-- BARRA NAVEGACION _______________________________________________________________________-->
+    <header>
+        <nav class="navegador">
+
+            <ul class="inicio">
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <img src="/icons/hamburger-menu-icon.svg" alt="menu hamburguesa">
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/">Inicio</a></li>
+                        <hr class="dropdown-divider">
+                        <li><a class="dropdown-item" href="./Pages/tienda.html">Tienda</a></li>
+                        <li><a class="dropdown-item" href="./Pages/alquimia.html">Alquimia</a></li>
+                        <li><a class="dropdown-item" href="./Pages/cursos.html">Cursos</a></li>
+                        <li><a class="dropdown-item" href="./Pages/servicios.html">Servicios</a></li>
+                        <hr class="dropdown-divider">
+                        <li><a class="dropdown-item" href="./Pages/contactanos.html">Contactanos</a></li>
+                    </ul>
+                </li>
+
+                <li class="logo1"><a href="/">
+                        <img src="/images/Dracarnis.svg" alt="logotipo dracarnis"> </a></li>
+                <li class="tienda , entrada"> <a href="/products">
+                        <img src="/icons/tienda 3.svg" alt="icono tienda"></a></li>
+                <li class="alquimia , entrada"><a href="./Pages/alquimia.html">
+                        <img src="/icons/alquimia.svg" alt="icono alquimia"></a></li>
+                <li class="cursos , entrada"><a href="./Pages/cursos.html">
+                        <img src="/icons/cursos 3.svg" alt="icono cursos"></a></li>
+                <li class="servicios , entrada"> <a href="./Pages/servicios.html">
+                        <img src="/icons/servicios 3.svg" alt="icono servicios"></a></li>
+                <li class="contactanos , entrada"> <a href="./Pages/contactanos.html">
+                        <img src="/icons/contactanos.svg" alt="icono contacto"></a></li>
+                <li class="drabar">
+                    <img src="/images/Dragon.svg" alt="isologo dracarnis">
+                </li>
+                <li class="carreta , entrada">
+                    <a href="/cart/{{cartId}}">
+                        <img src="/icons/carreta.svg" alt="carreta">
+                    </a>
+                </li>
+                <li class="user , entrada">
+                    <a href="/profile">
+                        <img src="/icons/user.svg" alt="user">
+                    </a>
+                </li>
+
+
+            </ul>
+        </nav>
+    </header>
+
+    <section class="ventanilla">
+        <div class="cuadroventaticket">
+            <h1>Detalles del Ticket</h1>
+            <p>Código del Ticket: {{ticket.ticketCode}}</p>
+            <p>Nombre: {{ticket.name}}</p>
+            <p>Email: {{ticket.email}}</p>
+            <p>Dirección: {{ticket.address}}</p>
+            <p>Teléfono: {{ticket.phone}}</p>
+            <h2>Productos</h2>
+            <ul>
+                {{#each ticket.products}}
+                <li>{{this.title}} - Cantidad: {{this.quantity}}gr - Precio: ${{this.price}}</li>
+                {{/each}}
+            </ul>
+            <p>Total a Pagar: ${{ticket.totalPrice}}</p>
+            <a href="/products">
+                <h3>Volver a todos los productos</h3>
+            </a>
+        </div>
+    </section>
+</body>
+
+</html>

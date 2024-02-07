@@ -1,7 +1,9 @@
 import { cartsModel } from '../DAO/models/carts.model.js';
+import { productsModel } from '../DAO/models/products.model.js'; 
 import CartDao from '../DAO/classes/CartDao.js';
 
-const cartDao= new CartDao()
+
+const cartDao = new CartDao()
 
 class CartRepository {
   // Obtener todos los carritos
@@ -68,19 +70,26 @@ class CartRepository {
 
   async deleteAllProductsInCart(cartId) {
     try {
-        const result = await this.dao.deleteAllProductsInCart(cartId);
-        return result;
+      const result = await this.dao.deleteAllProductsInCart(cartId);
+      return result;
     } catch (error) {
-        console.error(error);
-        throw new Error("Error al eliminar todos los productos del carrito");
+      console.error(error);
+      throw new Error("Error al eliminar todos los productos del carrito");
     }
-}
+  }
 
   // Agregar un producto al carrito del usuario
-  async addProductToUserCart(userId, productId, quantity) {
+  async addProductToUserCart(cartId, productId, quantity) {
     try {
-      const userCart = await cartsModel.findOneAndUpdate(
-        {}, // Encuentra cualquier carrito existente (puedes agregar una condición más específica aquí para encontrar el carrito del usuario)
+      // Primero, verifica si el producto existe
+      const productExists = await productsModel.findById(productId);
+      if (!productExists) {
+        throw new Error('El producto no existe');
+      }
+  
+      // Encuentra el carrito y agrega el producto
+      const updatedCart = await cartsModel.findOneAndUpdate(
+        { _id: cartId }, // Buscar por cartId
         {
           $push: {
             products: {
@@ -89,17 +98,38 @@ class CartRepository {
             }
           }
         },
-        { upsert: true, new: true } // Crea un carrito si no existe
+        { new: true }
       );
-
-      return userCart;
+  
+      return updatedCart;
     } catch (error) {
-      throw new Error('Error al agregar el producto al carrito del usuario');
+      throw new Error('Error al agregar el producto al carrito del usuario: ' + error.message);
+    }
+  }
+
+  // Método para obtener un carrito por el ID del usuario
+  async getCartByUserId(userId) {
+    try {
+      const cart = await cartsModel.findOne({ user: userId });
+      return cart;
+    } catch (error) {
+      throw new Error('Error al obtener el carrito del usuario');
+    }
+  }
+
+  // Método para crear un carrito asociado a un usuario
+  async createCartForUser(userId) {
+    try {
+      const newCart = new cartsModel({ products: [], user: userId });
+      await newCart.save();
+      return newCart;
+    } catch (error) {
+      throw new Error('Error al crear carrito para el usuario');
     }
   }
 
 
-  
+
 
 }
 

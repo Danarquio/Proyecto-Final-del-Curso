@@ -1,6 +1,7 @@
 import ProductManager from '../controllers/ProductManager.js';
 import { productsModel } from '../DAO/models/products.model.js';
-
+import { sendEmail } from '../config/nodemailer.js';
+import { usersModel } from '../DAO/models/users.model.js';
 
 const productManager = new ProductManager();
 
@@ -82,13 +83,45 @@ const ProductController = {
 }
 ,
 
-  deleteProductById: async (req, res) => {
+/*   deleteProductById: async (req, res) => {
     try {
       const productId = req.params.id;
       const result = await productManager.deleteProducts(productId);
 
       if (result) {
         res.json({ message: 'Producto eliminado correctamente', product: result });
+      } else {
+        res.status(404).json({ error: 'Producto no encontrado' });
+      }
+    } catch (error) {
+      res.status(500).json({ error: error.message || 'Error al eliminar el producto' });
+    }
+  }, */
+
+  deleteProductById: async (req, res) => {
+    try {
+      const productId = req.params.id;
+      const product = await productsModel.findById(productId).populate('owner'); // Obtén el producto con la información del propietario
+  
+      // Verifica si el producto existe y si el rol del usuario es 'premium'
+      if (product && product.owner && product.owner.rol === 'premium') {
+        // Envía un correo al usuario premium
+        const emailOptions = {
+          from: 'tu-email@ejemplo.com',
+          to: product.owner.email,
+          subject: 'Producto Eliminado por un Administrador',
+          html: `<p>Estimado ${product.owner.first_name},</p>
+                 <p>Tu producto "${product.title}" ha sido eliminado por un administrador.</p>`
+        };
+        await sendEmail(emailOptions);
+      }
+  
+      // Continúa con la eliminación del producto
+      const result = await productsModel.findByIdAndDelete(productId);
+  
+      if (result) {
+        res.redirect('/manage-Products')
+        //res.json({ message: 'Producto eliminado correctamente', product: result });
       } else {
         res.status(404).json({ error: 'Producto no encontrado' });
       }

@@ -1,39 +1,228 @@
-<img src="https://danarquio.github.io/preentrega1diaz/static/media/Dragon.561ef1fd2e215fdac7e01d9795925577.svg" style="max-height: 200px;">
-<hr>
-<a href="/chat"><h3>Ir al chat</h3></a>
-<a href="/profile"><h3>Ir a tu perfil de usuario</h3></a>
-<a href="/cart/6519628deea059c6ae6e8e6d"><h3>Ir al Carrito</h3></a>
-<a href="/"><h3>Volver al inicio</h3></a>
-<a href="/mockingproducts">Ir a Mocking de Productos ficticios</a>
+<!DOCTYPE html>
+<html lang="en">
 
-<h1>Productos</h1>
-<div class="shop">
-    
-    {{#each products}}
-    <div class="productos">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <img class="vuelta" src={{this.carru1}} alt={{this.title}} />
-        <div class="infoCard">
+  <title>Dracarnis</title>
+  <meta name="keywords"
+    content="Derivados de la carne, carne, chorizo, salame, jamon serrano, charqui, jerqui, jamon, salchicha, salchichon, embutidos, charcuteria , cecinas, fiambres, artesanal ">
 
-            <div class="textosprod">
+  <meta name="description"
+    content="Fabricación artesanal de productos derivados de la carne como: Cecinas, Charcuteria, Embutidos, Fiambres">
 
-                <h2 class="productos__nombre">{{this.title}}</h2>
-                <div>
-                    <h2 class="productos__precio">${{this.price}}</h2>
-                    <h4 class="productos__gramo">x {{this.minimo}}gramos</h4>
-                </div>
+  <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/style.css">
 
-                <button class="add-to-cart-btn" data-product-id="{{this._id}}">Agregar al carrito</button>
-                <a href="/products/{{this._id}}">Ver detalles</a>
-                
+</head>
+
+<body>
+
+  <!-- BARRA NAVEGACION _______________________________________________________________________-->
+  <header>
+    <nav class="navegador">
+
+      <ul class="inicio">
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="/icons/hamburger-menu-icon.svg" alt="menu hamburguesa">
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/">Inicio</a></li>
+            <hr class="dropdown-divider">
+            <li><a class="dropdown-item" href="./Pages/tienda.html">Tienda</a></li>
+            <li><a class="dropdown-item" href="./Pages/alquimia.html">Alquimia</a></li>
+            <li><a class="dropdown-item" href="./Pages/cursos.html">Cursos</a></li>
+            <li><a class="dropdown-item" href="./Pages/servicios.html">Servicios</a></li>
+            <hr class="dropdown-divider">
+            <li><a class="dropdown-item" href="./Pages/contactanos.html">Contactanos</a></li>
+          </ul>
+        </li>
+
+        <li class="logo1"><a href="/">
+            <img src="/images/Dracarnis.svg" alt="logotipo dracarnis"> </a></li>
+        <li class="tienda , entrada"> <a href="/products">
+            <img src="/icons/tienda 3.svg" alt="icono tienda"></a></li>
+        <li class="alquimia , entrada"><a href="./Pages/alquimia.html">
+            <img src="/icons/alquimia.svg" alt="icono alquimia"></a></li>
+        <li class="cursos , entrada"><a href="./Pages/cursos.html">
+            <img src="/icons/cursos 3.svg" alt="icono cursos"></a></li>
+        <li class="servicios , entrada"> <a href="./Pages/servicios.html">
+            <img src="/icons/servicios 3.svg" alt="icono servicios"></a></li>
+        <li class="contactanos , entrada"> <a href="./Pages/contactanos.html">
+            <img src="/icons/contactanos.svg" alt="icono contacto"></a></li>
+        <li class="drabar">
+          <img src="/images/Dragon.svg" alt="isologo dracarnis">
+        </li>
+        <li class="carreta , entrada">
+          <a href="/cart/{{cartId}}">
+            <img src="/icons/carreta.svg" alt="carreta">
+          </a>
+        </li>
+        <li class="user , entrada">
+          <a href="/profile">
+            <img src="/icons/user.svg" alt="user">
+          </a>
+        </li>
+
+
+      </ul>
+    </nav>
+  </header>
+
+
+
+    <!-- PESTAÑAS DELGADAS_______________________________________________________________________-->
+
+    <main class="main2">
+        <section class="pestañas">
+
+            <div class="cardtienda">
+                <img class="cardtienda_image2" src="/icons/tienda 3.svg" alt="icono TIENDA">
+                <a href="./tienda.html">
+                    <h3 class="card_text">TIENDA</h3>
+                </a>
             </div>
 
-        </div>
+            <a class="card2" href="./alquimia.html">
+                <img class="cardtienda_image3" src="/icons/alquimia.svg" alt="icono ALQUIMIA">
+                <h3 class="card_text">ALQUIMIA</h3>
+            </a>
+
+            <a class="card2" href="./cursos.html">
+                <img class="cardtienda_image3" src="/icons/cursos 3.svg" alt="icono CURSOS">
+                <h3 class="card_text">CURSOS</h3>
+            </a>
+
+            <a class="card2" href="./servicios.html">
+                <img class="cardtienda_image3" src="/icons/servicios 3.svg" alt="icono SERVICIOS">
+                <h3 class="card_text">SERVICIOS</h3>
+            </a>
+        </section>
+    </main>
 
 
+    <!-- CATEGORIAS DE TIENDA____________________________________________________________________-->
+    <div class="barra">
+
+        <li class="nav-item dropdown desplegable">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                CATEGORIAS
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="./tienda.html">Tienda</a></li>
+              <hr class="dropdown-divider">
+              <li><a class="dropdown-item" href="#">Curados</a></li>
+              <li><a class="dropdown-item" href="#">Embutidos</a></li>
+              <li><a class="dropdown-item" href="#">Cocidos</a></li>
+              <li><a class="dropdown-item" href="#">Ahumados</a></li>
+              <li><a class="dropdown-item" href="#">Deshidratados</a></li>
+            </ul>
+          </li>
+        <ul class="categorias">
+            <li>CURADOS</li>
+            <li>•</li>
+            <li>EMBUTIDOS</li>
+            <li>•</li>
+            <li>COCIDOS</li>
+            <li>•</li>
+            <li>AHUMADOS</li>
+            <li>•</li>
+            <li>DESHIDRATADOS</li>
+            <li>•</li>
+            <li>MERCH</li>
+        </ul>
     </div>
-    {{/each}}
 
+    <hr class="hrbarra">
+
+
+    <!-- VENTANILLA______________________________________________________________________-->
+
+<div class="shop">
+  <h1>Productos</h1>
+  <div class="estructura">
+  {{#each products}}
+  <div class="productos">
+    <img class="vuelta" src="{{this.carru1}}" alt="{{this.title}}" />
+    <div class="infoCard">
+      <div class="textosprod">
+        <h2 class="productos__nombre">{{this.title}}</h2>
+        <div>
+          <h2 class="productos__precio">${{this.price}}</h2>
+          <h4 class="productos__gramo">x {{this.minimo}} gramos</h4>
+        </div>
+        <input type="number" class="quantity-input" data-product-minimo="{{this.minimo}}" value="{{this.minimo}}"
+          step="{{this.minimo}}" min="{{this.minimo}}">
+        <button class="add-to-cart-btn" data-product-id="{{this._id}}">Agregar al carrito</button>
+        <a href="/products/{{this._id}}">Ver detalles</a>
+      </div>
+    </div>
+  </div>
+  {{/each}}
+  </div>
 </div>
 
+<script>
+  function checkUserLoggedIn() {
+    return fetch('/auth-status')
+      .then(response => response.json())
+      .then(data => data.isLoggedIn)
+      .catch(() => false);
+  }
 
+  document.addEventListener('DOMContentLoaded', () => {
+    checkUserLoggedIn().then(isLoggedIn => {
+      const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+      addToCartButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const productId = button.getAttribute('data-product-id');
+          const quantityInput = button.parentElement.querySelector('.quantity-input');
+          const quantity = parseInt(quantityInput.value);
+
+        if (isLoggedIn) {
+          // Lógica para agregar al carrito en la base de datos
+          fetch(`/api/carts/add-to-cart/${productId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ quantity }),
+            credentials: 'include'
+          })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+        } else {
+          // Lógica para agregar al carrito en el almacenamiento local
+          const cart = JSON.parse(localStorage.getItem('cart')) || [];
+          const productIndex = cart.findIndex(item => item.productId === productId);
+          if (productIndex !== -1) {
+            cart[productIndex].quantity += quantity;
+          } else {
+            cart.push({ productId, quantity });
+          }
+          localStorage.setItem('cart', JSON.stringify(cart));
+        }
+      });
+    });
+  });
+  })
+
+
+document.querySelector('.cart-link').addEventListener('click', (e) => {
+  e.preventDefault();
+  checkUserLoggedIn().then(isLoggedIn => {
+    if (isLoggedIn) {
+      window.location.href = '/cart/{{cartId}}';
+    } else {
+      const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+      // Enviar cartItems al servidor o manejarlos directamente en el cliente
+      window.location.href = '/local-cart';
+    }
+  });
+});
+</script>

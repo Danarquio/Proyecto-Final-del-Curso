@@ -16,4 +16,4 @@ const userSchema = new mongoose.Schema({
     last_connection: Date // Fecha de la última conexión
 })
 
-export const usersModel = mongoose.model(usersCollection, userSchema)
+export const usersModel = mongoose.model("User", userSchema)
