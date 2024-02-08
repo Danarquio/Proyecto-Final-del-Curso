@@ -1,11 +1,9 @@
-# CUARTA PRACTICA INTEGRACION
+# PROYECTO FINAL DEL CURSO
 ## Servidor Express con Node, Handlebars y persistencia de datos en MongoDB, login de usuario con diversos roles y capacidad de modificar y eliminar productos de la base de datos
 Este proyecto es una aplicación en Node.js que gestiona productos y carritos de compras, con funcionalidades avanzadas de gestión de usuarios y productos. Utiliza Handlebars para renderizar vistas, MongoDB para la persistencia de datos y cuenta con un sistema de autenticación y autorización para diferentes roles de usuario.
 
 Novedades en Esta Versión
-En la ultima actualizacion, se incluye en el schema del user las propiedades de "documents" donde se almacenara los archivos cargados por los usuarios, y "last-connection" que almacena en la base de datos la fecha de la ultima vez que el usuario haga login o logout.
-
-Tambien se incluye una opcion de validacion para que los usuarios normales de tipo "user" puedan subir su rango a usuario de tipo "premium" que les permita cargar productos al sistema. Este sistema de validacion requiere que el usuario cargue tres documentos: identificacion, comprobante de domicilio y comprobante de estado de cuenta. Una vez cargados estos archivos, el usuario puede actualizar su rol y cambiar a premium
+En la ultima actualizacion, se aplican los cambios necesarios para una experiencia completa de compra de productos desde el front, un usuario logueado o no puede agregar productos a su carrito seleccionando la cantidad deseada. Si el usuario esta logueado su carrito se asociará a este usuario y se almacenara la informacion en la base de datos. Al finalizar la compra se genera un ticket de comprobante y una notificacion via email al correo ingresado en el formulario de datos de envio de la compra. 
 
 ## Instalación
 
@@ -200,3 +198,5 @@ Proyecto Final/
 ![Captura de Pantalla 5](/src/public/files/Capturadepantalla5.png)
 ![Captura de Pantalla 6](/src/public/files/Capturadepantalla6.png)
 ![Captura de Pantalla 7](/src/public/files/Capturadepantalla7.png)
+![Captura de Pantalla 8](/src/public/files/Capturadepantalla8.png)
+![Captura de Pantalla 9](/src/public/files/Capturadepantalla9.png)
